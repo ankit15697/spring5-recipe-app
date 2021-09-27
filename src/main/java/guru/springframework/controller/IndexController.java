@@ -1,14 +1,30 @@
 package guru.springframework.controller;
 
+import guru.springframework.domain.Category;
+import guru.springframework.repositories.CategoryRepository;
+import guru.springframework.repositories.UnitOfMeasureRepository;
+import guru.springframework.services.RecipeService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Optional;
+
 @Controller
 public class IndexController {
-    @RequestMapping(value = {"", "/", "/index"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getIndexPage() {
+    private final RecipeService recipeService;
+
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
+
+    @RequestMapping({"", "/", "/index"})
+    public String getIndexPage(Model model) {
+
+        model.addAttribute("recipes", recipeService.getRecipes());
+
         return "index";
     }
 }
